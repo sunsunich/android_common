@@ -6,5 +6,7 @@ public class LogManager {
         // 456
         // sdfsdf
         /// ewrer
+
+        // master commit 1
     }
 }
