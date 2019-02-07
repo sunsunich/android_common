@@ -7,5 +7,7 @@ public class LogManager {
         // sdfsdf
         /// ewrer
         // new bRANCH
+
+        // new code in new branch
     }
 }
