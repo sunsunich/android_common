@@ -6,5 +6,6 @@ public class LogManager {
         // 456
         // sdfsdf
         /// ewrer
+        // new bRANCH
     }
 }
