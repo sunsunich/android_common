@@ -1,19 +1,8 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-        jcenter()
-    }
-    dependencies {
-        // to invoke git commands during the build step
-        classpath 'org.ajoberstar:grgit:2.2.1'
-    }
-}
+apply plugin: 'org.ajoberstar.grgit'
 
-apply plugin: org.ajoberstar.grgit.gradle.GrgitPlugin
-
-ext.android = {
-    compileSdkVersion 27
+ext.commonAndroid = {
+    compileSdkVersion 25
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 23
@@ -21,19 +10,14 @@ ext.android = {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
 }
 
 ext.dependencies = {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    def app_compat_version = "25.4.0"
+    implementation "com.android.support:appcompat-v7:$app_compat_version"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

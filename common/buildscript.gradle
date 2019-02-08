@@ -1,0 +1,10 @@
+project.buildscript.repositories {
+    mavenCentral()
+    google()
+    jcenter()
+}
+
+project.buildscript.dependencies {
+    // to invoke git commands during the build step
+    classpath 'org.ajoberstar:grgit:2.2.1'
+}

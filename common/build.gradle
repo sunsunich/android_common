@@ -1,15 +1,25 @@
+apply plugin: 'com.android.library'
 apply from: 'common_build.gradle'
 
-apply plugin: 'com.android.library'
+buildscript {
+    apply from: 'buildscript.gradle'
+}
 
-android ext.android
+android ext.commonAndroid
 
 android {
     defaultConfig {
-        def fullVersion = getFullVersion(1,0,0)
+        def fullVersion = getFullVersion(1, 0, 0)
         versionCode fullVersion.get(0)
         versionNameSuffix fullVersion.get(1)
         versionName fullVersion.get(2)
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 
