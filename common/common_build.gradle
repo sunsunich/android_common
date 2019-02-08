@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        jcenter()
+    }
+    dependencies {
+        // to invoke git commands during the build step
+        classpath 'org.ajoberstar:grgit:2.2.1'
+    }
+}
+
+apply plugin: org.ajoberstar.grgit.gradle.GrgitPlugin
+
+ext.android = {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 25
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+ext.dependencies = {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+
+static def getDate() {
+    new Date().format('yyyyMMdd')
+}
+
+ext.getFullVersion = { int versionMajor, int versionMinor, int versionPatch ->
+    def versionCode = versionMajor * 10000 + versionMinor * 100 + versionPatch
+
+    // Use CircleCI build number if available, for local builds use current date and commit hash
+    def versionBranchSuffix = ""
+    if (System.getenv("CIRCLE_BRANCH") != null) {
+        if (System.getenv("CIRCLE_BRANCH").toLowerCase().equals("master")) {
+            versionBranchSuffix = ""
+        } else if (System.getenv("CIRCLE_BRANCH").toLowerCase().equals("develop")) {
+            versionBranchSuffix = "-D"
+        } else {
+            versionBranchSuffix = "-F"
+        }
+    }
+    def versionNameSuffix = System.getenv("CIRCLE_BUILD_NUM") != null ? "-" + System.getenv("CIRCLE_BUILD_NUM") : "-${getDate()}#${grgit.head().abbreviatedId}"
+    versionNameSuffix += versionBranchSuffix
+    def versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
+    return new Tuple(versionCode, versionNameSuffix, versionName)
+}
